@@ -16,6 +16,8 @@ public abstract class TupleToMessage implements Serializable {
   protected void prepare(@SuppressWarnings("rawtypes") Map stormConfig) {}
 
   /**
+   * 如果有指定replyTo和exchnage/routing key，那么优先使用replyTo属性。
+   * <p>
    * Convert the incoming {@link Tuple} on the Storm stream to a {@link Message}
    * for posting to RabbitMQ.
    * 
@@ -45,7 +47,16 @@ public abstract class TupleToMessage implements Serializable {
    * @return message body as a byte array or null if extraction cannot be performed
    */
   protected abstract byte[] extractBody(Tuple input);
-
+  
+  
+  /**
+   * if 
+   *
+   * @param input the incoming tuple
+   * @return replyTo(It is a routing key or queue name)
+   */
+  protected abstract String specifyReplyTo(Tuple input);
+  
   /**
    * Determine the exchange where the message is published to. This can be
    * derived based on the incoming tuple or a fixed value.

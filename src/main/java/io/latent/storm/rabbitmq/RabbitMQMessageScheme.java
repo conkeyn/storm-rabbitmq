@@ -5,6 +5,8 @@ import backtype.storm.tuple.Fields;
 
 import java.util.*;
 
+import com.rabbitmq.client.LongString;
+
 import backtype.storm.task.TopologyContext;
 import java.io.Serializable;
 
@@ -91,6 +93,8 @@ public class RabbitMQMessageScheme implements MessageScheme {
           entry.getValue() instanceof String ||
           entry.getValue() instanceof Date) {
         serializableHeaders.put(entry.getKey(), entry.getValue());
+      }else if(entry.getValue() instanceof LongString){
+    	  serializableHeaders.put(entry.getKey(), entry.getValue().toString());
       }
     }
     return serializableHeaders;

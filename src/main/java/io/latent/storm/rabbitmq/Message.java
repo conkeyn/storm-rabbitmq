@@ -283,6 +283,13 @@ public class Message
 		{
 			return replyTo;
 		}
+
+		@Override
+		public String toString()
+		{
+			return "MessageForSending [headers="+ headers + ", replyTo=" + replyTo + ", exchangeName=" + exchangeName + ", routingKey=" + routingKey + ", contentType=" + contentType + ", contentEncoding=" + contentEncoding
+					+ ", persistent=" + persistent + "]";
+		}
 	}
 
 }

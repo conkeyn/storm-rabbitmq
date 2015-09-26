@@ -52,13 +52,16 @@ public class RabbitMQProducer implements Serializable {
     if (channel == null) throw new ReportedFailedException("No connection to RabbitMQ");
     try {
       AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
-                                                                .contentType(message.getContentType())
-                                                                .contentEncoding(message.getContentEncoding())
-                                                                .deliveryMode((message.isPersistent()) ? 2 : 1)
-                                                                .replyTo(message.getReplyTo())
-                                                                .headers(message.getHeaders())
-                                                                .build();
-      channel.basicPublish(message.getExchangeName()==null?"":message.getExchangeName(), message.getRoutingKey()==null?"":message.getRoutingKey(), properties, message.getBody());
+                                        .contentType(message.getContentType())
+                                        .contentEncoding(message.getContentEncoding())
+                                        .deliveryMode((message.isPersistent()) ? 2 : 1)
+                                        .replyTo(message.getReplyTo())
+                                        .headers(message.getHeaders())
+                                        .build();
+      String exchange = message.getExchangeName()==null?"":message.getExchangeName();
+      String routingKey = message.getRoutingKey()==null?"":message.getRoutingKey();
+      channel.basicPublish( exchange, routingKey, properties, message.getBody());
+      logger.info("Message header : "+properties.toString());
     } catch (AlreadyClosedException ace) {
       logger.error("already closed exception while attempting to send message", ace);
       reset();
